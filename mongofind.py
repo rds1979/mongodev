@@ -11,11 +11,12 @@ def find_with_glt():
     query = { '$and' : [ { 'type' : 'exam' },{ 'score' : { '$gte' : 65, '$lte' : 80 } } ] }
     try:
         items = coll.find(query).skip(10).limit(10)
+        items.sort('student_id')
     except Exception as e:
         print("При поиске записи произошла ошибка: ", type(e), e)
 
     for item in items:
-        print(item['type'], ':', item['score'])
+        print(item['student_id'], ':', item['type'], ':', item['score'])
 
 def find_one(student_id):
     query = { 'student_id' : student_id }
@@ -28,9 +29,11 @@ def find_one(student_id):
 
 def find_with_regex():
     query = { 'type' : { '$regex' : 'exam|quiz', '$options' : 'i' } }
-    projn = { 'student_id' : 1, 'type' : 1, 'score' : 1 }
+    projn = { '_id' : 0, 'student_id' : 1, 'type' : 1, 'score' : 1 }
     try:
-        items = coll.find(query, projn).limit(10)
+        items = coll.find(query, projn)
+        items.limit(10)
+        items.sort('student_id')
     except Exception as e:
         print("При поиске записи произошла ошибка: ", type(e), e)
 
