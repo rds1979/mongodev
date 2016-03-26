@@ -31,5 +31,32 @@ def update_many():
     except Exception as e:
         raise
 
+
+def remove_date_many():
+    try:
+        result = coll.update_many( { 'review_date' : { '$exists' : 'True' } },
+                                   { '$unset' : { 'review_date' : 1 } } )
+        print('num matched: ', result.matched_count)
+    except Exception as e:
+        print("При обновлении записи произошла ошибка: ", type(e), e)
+        raise
+
+
+def replace_one(student_id):
+    query = { 'student_id' : student_id, 'type' : 'homework' }
+    try:
+        row = coll.find_one(query)
+        print('before update: ', row)
+        row['review_date'] = datetime.datetime.now()
+        row_id = row['_id']
+        coll.replace_one({ '_id' : row_id }, row )
+        row = coll.find_one(row_id)
+        print('after update: ', row)
+    except Exception as e:
+        print("При обновлении записи произошла ошибка: ", type(e), e)
+        raise
+
 #update_one(2)
-update_many()
+#update_many()
+#remove_date_many()
+replace_one(2)
