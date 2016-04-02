@@ -1,0 +1,7 @@
+
+db.collection.find( { 'age' : { '$gt' : 18 } } ).sort( { 'age' : 1 } ).pretty()
+
+db.grades.find(
+    { 'student_id' : { $gt : 100, $lt : 200 } },
+    { 'student_id' : 1, 'type' : 1,  'score' : 1, '_id' : 0 }
+).skip(10).limit(15).sort( { 'score' : 1 } )
